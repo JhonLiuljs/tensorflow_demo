@@ -6,7 +6,7 @@ name_dataset = 'name.csv'
 
 train_x = []
 train_y = []
-with open(name_dataset, 'r') as f:
+with open(name_dataset, 'r', encoding='utf-8') as f:
     first_line = True
     for line in f:
         if first_line is True:
@@ -123,14 +123,14 @@ def train_neural_network():
             for i in range(num_batch):
                 batch_x = train_x_vec[i * batch_size: (i + 1) * batch_size]
                 batch_y = train_y[i * batch_size: (i + 1) * batch_size]
+            if e % 50 == 0:
+                saver.save(sess, "H:/java/project/tensorflow_demo/2.Forecast_name/name2sex.model", global_step=e)
         try:
             _, loss_ = sess.run([train_op, loss], feed_dict={X: batch_x, Y: batch_y, dropout_keep_prob: 0.5})
             print(e, i, loss_)
         except:
             print
             'error'  # 保存模型
-    if e % 50 == 0:
-        saver.save(sess, "name2sex.model", global_step=e)
 
 
 # 使用训练的模型
@@ -166,5 +166,5 @@ def detect_sex(name_list):
 
 
 if __name__ == '__main__':
-    train_neural_network()
-    detect_sex(["白富美", "高帅富", "王婷婷", "田野"])
+    # train_neural_network()
+    detect_sex(["白富美", "高帅富", "王婷婷", "田野", "刘军帅", "吕晓鹏"])
