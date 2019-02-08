@@ -41,16 +41,14 @@ def gen_captcha_text_and_image():
 
 if __name__ == '__main__':
     # 测试
-    while (1):
+    for i in range(1000):
         text, image = gen_captcha_text_and_image()
-        print
-        'begin ', time.ctime(), type(image)
+        print('begin ', time.ctime(), type(image))
         f = plt.figure()
         ax = f.add_subplot(111)
         ax.text(0.1, 0.9, text, ha='center', va='center', transform=ax.transAxes)
         plt.imshow(image)
 
         # plt.show()
-        print
-        'end ', time.ctime()
+        print('end ', time.ctime())
     sys.exit()
