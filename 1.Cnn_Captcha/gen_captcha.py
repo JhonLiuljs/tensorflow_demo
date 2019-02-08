@@ -46,7 +46,7 @@ def gen_captcha_text_and_image():
 
 if __name__ == '__main__':
     # 测试
-    for i in range(20000):
+    for i in range(1000):
         text, image = gen_captcha_text_and_image()
         print('begin ', time.ctime(), type(image))
         f = plt.figure()
