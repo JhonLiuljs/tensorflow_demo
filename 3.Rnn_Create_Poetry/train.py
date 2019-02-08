@@ -2,7 +2,7 @@
 import collections
 import numpy as np
 import tensorflow as tf
-import codecs
+import sys
 
 # -------------------------------数据预处理---------------------------#
 
@@ -142,6 +142,6 @@ def train_neural_network():
 
 if __name__ == '__main__':
     train_neural_network()
-
+    sys.exit()
 # import tensorflow as tf
 # print（tf.nn.rnn_cell.BasicRNNCell）

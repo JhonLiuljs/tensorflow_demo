@@ -1,6 +1,6 @@
 # coding:utf-8
 import tensorflow as tf
-import numpy as np
+import sys
 
 name_dataset = 'name.csv'
 
@@ -168,3 +168,4 @@ def detect_sex(name_list):
 if __name__ == '__main__':
     # train_neural_network()
     detect_sex(["白富美", "高帅富", "王婷婷", "田野", "刘军帅", "吕晓鹏"])
+    sys.exit()

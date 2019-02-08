@@ -2,6 +2,7 @@
 import collections
 import numpy as np
 import tensorflow as tf
+import sys
 
 # -------------------------------数据预处理---------------------------#
 
@@ -146,3 +147,4 @@ def gen_poetry():
 
 if __name__ == '__main__':
     print(gen_poetry())
+    sys.exit()

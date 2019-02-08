@@ -6,6 +6,7 @@ from gen_captcha import ALPHABET
 
 import numpy as np
 import tensorflow as tf
+import sys
 
 text, image = gen_captcha_text_and_image()  # 先生成验证码和文字测试模块是否完全
 print("验证码图像channel:", image.shape)  # (60, 160, 3)
@@ -210,3 +211,4 @@ def train_crack_captcha_cnn():
 
 if __name__ == '__main__':
     train_crack_captcha_cnn()
+    sys.exit()

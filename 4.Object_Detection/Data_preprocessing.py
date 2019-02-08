@@ -14,6 +14,7 @@ import tensorflow as tf
 
 from object_detection.utils import dataset_util
 from object_detection.utils import label_map_util
+import sys
 
 flags = tf.app.flags
 flags.DEFINE_string('output_path', '', 'Path to output TFRecord')
@@ -110,3 +111,4 @@ def main(_):
 
 if __name__ == '__main__':
     tf.app.run()
+    sys.exit()

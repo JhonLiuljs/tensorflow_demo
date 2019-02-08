@@ -3,7 +3,9 @@ from captcha.image import ImageCaptcha  # pip install captcha
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
-import random, time
+import random
+import time
+import sys
 
 # 验证码中的字符, 就不用汉字了
 number = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -51,3 +53,4 @@ if __name__ == '__main__':
         # plt.show()
         print
         'end ', time.ctime()
+    sys.exit()

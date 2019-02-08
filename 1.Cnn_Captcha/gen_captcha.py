@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import random
 import time
+import sys
 
 # 验证码中的字符, 就不用汉字了
 number = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -55,5 +56,6 @@ if __name__ == '__main__':
         # plt.show()  # 显示，，取消注释并在30行取消写到文件的注释即可保存为文件
         print('end ', time.ctime())
     print("over!")
+    sys.exit()
 
 # print gen_captcha_text_and_image()
