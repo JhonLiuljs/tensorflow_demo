@@ -3,7 +3,8 @@ from captcha.image import ImageCaptcha  # pip install captcha
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
-import random, time, os
+import random
+import time
 
 # 验证码中的字符, 就不用汉字了
 number = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -15,7 +16,7 @@ ALPHABET = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'
 
 # 验证码一般都无视大小写；验证码长度4个字符
 def random_captcha_text(char_set=number + alphabet + ALPHABET, captcha_size=4):
-    ''' 指定使用的验证码内容列表和长期 返回随机的验证码文本 '''
+    """ 指定使用的验证码内容列表和长期 返回随机的验证码文本 """
     captcha_text = []
     for i in range(captcha_size):
         c = random.choice(char_set)
@@ -24,7 +25,7 @@ def random_captcha_text(char_set=number + alphabet + ALPHABET, captcha_size=4):
 
 
 def gen_captcha_text_and_image():
-    '''生成字符对应的验证码 '''
+    """生成字符对应的验证码 """
     image = ImageCaptcha()  # 导入验证码包 生成一张空白图
 
     captcha_text = random_captcha_text()  # 随机一个验证码内容
