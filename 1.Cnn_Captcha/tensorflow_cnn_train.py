@@ -104,7 +104,7 @@ def get_next_batch(batch_size=128):
 
     # 有时生成图像大小不是(60, 160, 3)
     def wrap_gen_captcha_text_and_image():
-        ''' 获取一张图，判断其是否符合（60，160，3）的规格'''
+        """ 获取一张图，判断其是否符合（60，160，3）的规格"""
         while True:
             text, image = gen_captcha_text_and_image()
             if image.shape == (60, 160, 3):  # 此部分应该与开头部分图片宽高吻合
