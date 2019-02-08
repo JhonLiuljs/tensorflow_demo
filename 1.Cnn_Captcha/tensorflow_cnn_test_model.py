@@ -214,8 +214,9 @@ def train_crack_captcha_cnn():
 def crack_captcha(captcha_image):
     output = crack_captcha_cnn()
 
-    saver = tf.train.Saver()
+    saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
     with tf.Session() as sess:
+        print(tf.train.latest_checkpoint('.'))
         saver.restore(sess, tf.train.latest_checkpoint('.'))
 
         predict = tf.argmax(tf.reshape(output, [-1, MAX_CAPTCHA, CHAR_SET_LEN]), 2)
