@@ -204,7 +204,7 @@ def train_crack_captcha_cnn():
                 print(step, acc)
                 # 如果准确率大于50%,保存模型,完成训练
                 if acc > 0.5:
-                    saver.save(sess, "crack_capcha.model", global_step=step)
+                    saver.save(sess, "H:/java/project/tensorflow_demo/1.Cnn_Captcha/crack_capcha.model", global_step=step)
                     break
             step += 1
 
