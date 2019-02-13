@@ -115,7 +115,7 @@ def neural_network(model='lstm', rnn_size=128, num_layers=2):
 def train_neural_network():
     logits, last_state, _, _, _ = neural_network()
     targets = tf.reshape(output_targets, [-1])
-    loss = tf.nn.seq2seq.sequence_loss_by_example([logits], [targets], [tf.ones_like(targets, dtype=tf.float32)],
+    loss = tf.contrib.legacy_seq2seq.sequence_loss_by_example([logits], [targets], [tf.ones_like(targets, dtype=tf.float32)],
                                                   len(words))
     cost = tf.reduce_mean(loss)
     learning_rate = tf.Variable(0.0, trainable=False)
