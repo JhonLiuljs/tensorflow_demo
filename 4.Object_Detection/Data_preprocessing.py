@@ -17,7 +17,7 @@ from object_detection.utils import label_map_util
 import sys
 
 flags = tf.app.flags
-flags.DEFINE_string('output_path', '', 'Path to output TFRecord')
+flags.DEFINE_string('output_path', 'out.record', 'Path to output TFRecord')
 # flags.DEFINE_string('./', '', './')
 FLAGS = flags.FLAGS
 
@@ -32,6 +32,7 @@ def create_tf_example(img_url, ans_url):
     height = 480  # Image height
     width = 680  # Image width
     filename = img_url  # Filename of the image. Empty if image is not from file
+    file_name = filename.encode(encoding='utf-8')
 
     encoded_image_data = None  # Encoded image bytes
 
@@ -41,11 +42,14 @@ def create_tf_example(img_url, ans_url):
     image = PIL.Image.open(encoded_jpg_io)
 
     # 这里需要处理一下你的数据是什么格式的 # b'jpeg' or b'png'
-    if image.format != 'JPEG':
+    if image.format != 'JPEG' and image.format != 'PNG':
         raise ValueError('Image format not JPEG')
     key = hashlib.sha256(encoded_jpg).hexdigest()
     image_format = b'jpeg'  # b'jpeg' or b'png'
-
+    if image.format == 'JPEG':
+        image_format = b'jpeg'
+    elif image.format != 'PNG':
+        image_format = b'png'
     f = open(ans_root_dir + ans_url)
 
     xmins = [];
@@ -64,11 +68,13 @@ def create_tf_example(img_url, ans_url):
         ymaxs.append(float(t_list[3]) / height)  # List of normalized left x coordinates in bounding box (1 per box)
 
         # 这里看情况进行处理编码和处理文本的\n等符号，
-        color = t_list[4].decode("gb2312").encode("utf-8")
-        shape = t_list[5].replace("\r\n", "").decode("gb2312").encode("utf-8")
+        color = t_list[4].encode("utf-8")
+        shape = t_list[5].replace("\r\n", "").encode("utf-8")
 
         # ****这个可以按照你的需求继续增加类别
-        if color == "白色" and shape == "猫": classes_text.append("white_cat"); classes.append(1)
+        if color == "白色" and shape == "猫":
+            classes_text.append("white_cat")
+            classes.append(1)
 
     # print xmins,ymins,xmaxs,ymaxs
     # print classes_text,classes
@@ -76,8 +82,8 @@ def create_tf_example(img_url, ans_url):
     tf_example = tf.train.Example(features=tf.train.Features(feature={
         'image/height': dataset_util.int64_feature(height),
         'image/width': dataset_util.int64_feature(width),
-        'image/filename': dataset_util.bytes_feature(filename),
-        'image/source_id': dataset_util.bytes_feature(filename),
+        'image/filename': dataset_util.bytes_feature(file_name),
+        'image/source_id': dataset_util.bytes_feature(file_name),
         'image/key/sha256': dataset_util.bytes_feature(key.encode('utf8')),
         'image/encoded': dataset_util.bytes_feature(encoded_jpg),
         'image/format': dataset_util.bytes_feature(image_format),
@@ -101,7 +107,7 @@ def main(_):
 
     for img_url in img_all_list:
         # 这里是要通过id来换算出ans的文件路径，
-        ans_url = img_url.replace("ques", "ans").replace("jpg", "txt")
+        ans_url = img_url.replace("ques", "ans").replace("jpg", "txt").replace("png", "txt").replace("jpeg", "txt")
 
         tf_example = create_tf_example(img_url, ans_url)
         writer.write(tf_example.SerializeToString())
