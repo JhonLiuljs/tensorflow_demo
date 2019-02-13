@@ -131,11 +131,11 @@ def train_neural_network():
         for epoch in range(50):
             sess.run(tf.assign(learning_rate, 0.002 * (0.97 ** epoch)))
             n = 0
-            for batche in range(n_chunk):
+            for batch in range(n_chunk):
                 train_loss, _, _ = sess.run([cost, last_state, train_op],
                                             feed_dict={input_data: x_batches[n], output_targets: y_batches[n]})
                 n += 1
-                print(epoch, batche, train_loss)
+                print(epoch, batch, train_loss)
             if epoch % 7 == 0:
                 saver.save(sess, './poetry.module', global_step=epoch)
 
