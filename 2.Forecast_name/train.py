@@ -106,38 +106,33 @@ def neural_network(vocabulary_size, embedding_size=128, num_filters=128):
     return output
 
 
-# 使用训练的模型
-def detect_sex(name_list):
-    x = []
-    for name in name_list:
-        name_vec = []
-        for word in name:
-            name_vec.append(vocab.get(word))
-        while len(name_vec) < max_name_length:
-            name_vec.append(0)
-        x.append(name_vec)
-
+# 训练
+def train_neural_network():
     output = neural_network(len(vocabulary_list))
+
+    optimizer = tf.train.AdamOptimizer(1e-3)
+    loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=output, labels=Y))
+    grads_and_vars = optimizer.compute_gradients(loss)
+    train_op = optimizer.apply_gradients(grads_and_vars)
 
     saver = tf.train.Saver(tf.global_variables())
     with tf.Session() as sess:
-        # 恢复前一次训练
-        ckpt = tf.train.get_checkpoint_state('.')
-        if ckpt != None:
-            print(ckpt.model_checkpoint_path)
-            saver.restore(sess, ckpt.model_checkpoint_path)
-        else:
-            print("没找到模型")
+        sess.run(tf.global_variables_initializer())
 
-        predictions = tf.argmax(output, 1)
-        res = sess.run(predictions, {X: x, dropout_keep_prob: 1.0})
-
-        i = 0
-        for name in name_list:
-            print(name, '女' if res[i] == 0 else '男')
-            i += 1
+        for e in range(201):
+            for i in range(num_batch):
+                batch_x = train_x_vec[i * batch_size: (i + 1) * batch_size]
+                batch_y = train_y[i * batch_size: (i + 1) * batch_size]
+            if e % 50 == 0:
+                saver.save(sess, "./name2sex.model", global_step=e)
+        try:
+            _, loss_ = sess.run([train_op, loss], feed_dict={X: batch_x, Y: batch_y, dropout_keep_prob: 0.5})
+            print(e, i, loss_)
+        except:
+            print
+            'error'  # 保存模型
 
 
 if __name__ == '__main__':
-    detect_sex(["白富美", "高帅富", "王婷婷", "田野", "刘军帅", "吕晓鹏"])
+    train_neural_network()
     sys.exit()
