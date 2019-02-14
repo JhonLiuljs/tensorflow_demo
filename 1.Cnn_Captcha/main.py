@@ -206,7 +206,7 @@ def train_crack_captcha_cnn():
                 print(step, acc)
                 # 如果准确率大于50%,保存模型,完成训练
                 if acc > 0.5:
-                    saver.save(sess, "crack_capcha.model", global_step=step)
+                    saver.save(sess, "./crack_capcha.model", global_step=step)
                     break
             step += 1
 
@@ -222,10 +222,10 @@ def crack_captcha(captcha_image):
         predict = tf.argmax(tf.reshape(output, [-1, MAX_CAPTCHA, CHAR_SET_LEN]), 2)
         text_list = sess.run(predict, feed_dict={X: [captcha_image], keep_prob: 1})
 
-        text = text_list[0].tolist()
+        texts = text_list[0].tolist()
         vector = np.zeros(MAX_CAPTCHA * CHAR_SET_LEN)
         i = 0
-        for n in text:
+        for n in texts:
             vector[i * CHAR_SET_LEN + n] = 1
             i += 1
         return vec2text(vector)
