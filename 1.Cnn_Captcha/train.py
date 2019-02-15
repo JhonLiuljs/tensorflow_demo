@@ -366,5 +366,5 @@ if __name__ == '__main__':
         image = image.flatten() / 255  # 将图片一维化
 
         predict_text = crack_captcha(image, 36300)  # 导入模型识别
-        print("正确: {}  预测: {}".format(text, [char_set[char] for i, char in enumerate(predict_text)]))
+        print("正确: {}  预测: {}".format(text, predict_text))
     sys.exit()
