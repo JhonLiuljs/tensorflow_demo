@@ -218,10 +218,14 @@ def train_first():
 def train_continue(step):
     loss, optimizer, accuracy = back_propagation()
 
-    saver = tf.train.Saver()
+    saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
     with tf.Session() as sess:
-        path = "./models/crack_capcha.model-" + str(step)
-        saver.restore(sess, path)
+        if step is None:
+            print(tf.train.latest_checkpoint('.'))
+            saver.restore(sess, tf.train.latest_checkpoint('.'))
+        else:
+            path = './models/crack_capcha.model-' + str(step)
+            saver.restore(sess, path)
         # 36300 36300 0.9325 0.0147698
         while 1:
             batch_x, batch_y = get_next_batch(100)
@@ -242,11 +246,14 @@ def train_continue(step):
 def crack_captcha(captcha_image, step):
     output = crack_captcha_cnn()
 
-    saver = tf.train.Saver()
+    saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
     with tf.Session() as sess:
-        path = './models/crack_capcha.model-' + str(step)
-        saver.restore(sess, path)
-
+        if step is None:
+            print(tf.train.latest_checkpoint('.'))
+            saver.restore(sess, tf.train.latest_checkpoint('.'))
+        else:
+            path = './models/crack_capcha.model-' + str(step)
+            saver.restore(sess, path)
         predict = tf.argmax(tf.reshape(output, [-1, MAX_CAPTCHA, CHAR_SET_LEN]), 2)
         text_list = sess.run(predict, feed_dict={X: [captcha_image], keep_prob: 1})
         text = text_list[0].tolist()
@@ -335,12 +342,11 @@ def train_crack_captcha_cnn():
             step += 1
 '''
 
-
 if __name__ == '__main__':
-    #训练和测试开关
+    # 训练和测试开关
     train = 1
     if train:
-        #train_continue(36300)
+        # train_continue(36300)
         train_first()
     else:
         text, image = gen_captcha_text_and_image()
@@ -351,8 +357,8 @@ if __name__ == '__main__':
         plt.imshow(image)
         plt.show()
 
-        image = convert2gray(image)     # 生成一张新图把彩色图像转为灰度图像
-        image = image.flatten() / 255   # 将图片一维化
+        image = convert2gray(image)  # 生成一张新图把彩色图像转为灰度图像
+        image = image.flatten() / 255  # 将图片一维化
 
         predict_text = crack_captcha(image, 36300)  # 导入模型识别
         print("正确: {}  预测: {}".format(text, [char_set[char] for i, char in enumerate(predict_text)]))
