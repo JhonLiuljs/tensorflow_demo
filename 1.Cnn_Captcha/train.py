@@ -196,9 +196,9 @@ def back_propagation():
 def train_first():
     loss, optimizer, accuracy = back_propagation()
 
-    saver = tf.train.Saver()
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
+        saver = tf.train.Saver(tf.all_variables())
         step = 0
         while 1:
             batch_x, batch_y = get_next_batch(64)
@@ -208,7 +208,7 @@ def train_first():
                 batch_x_test, batch_y_test = get_next_batch(100)
                 acc = sess.run(accuracy, feed_dict={X: batch_x_test, Y: batch_y_test, keep_prob: 1.})
                 print(step, acc, loss_)
-                if acc > 0.80:  # 准确率大于0.80保存模型 可自行调整
+                if acc > 0.001:  # 准确率大于0.80保存模型 可自行调整
                     saver.save(sess, './models/crack_capcha.model', global_step=step)
                     break
             step += 1
