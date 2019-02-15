@@ -128,8 +128,8 @@ def train_neural_network():
         try:
             _, loss_ = sess.run([train_op, loss], feed_dict={X: batch_x, Y: batch_y, dropout_keep_prob: 0.5})
             print(e, i, loss_)
-        except:
-            print
+        except Exception as e:
+            print(e)
             'error'  # 保存模型
 
 
