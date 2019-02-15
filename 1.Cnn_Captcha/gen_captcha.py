@@ -25,6 +25,7 @@ def random_captcha_text(char_set=number + alphabet + ALPHABET, captcha_size=4):
     return captcha_text
 
 
+# 使用ImageCaptcha库生成验证码
 def gen_captcha_text_and_image():
     """生成字符对应的验证码 """
     image = ImageCaptcha()  # 导入验证码包 生成一张空白图
