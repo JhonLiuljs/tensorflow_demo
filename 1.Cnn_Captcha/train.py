@@ -207,7 +207,7 @@ def train_first():
             if step % 100 == 0:
                 batch_x_test, batch_y_test = get_next_batch(100)
                 acc = sess.run(accuracy, feed_dict={X: batch_x_test, Y: batch_y_test, keep_prob: 1.})
-                print(step, acc, loss_, acc)
+                print(step, acc, loss_)
                 if acc > 0.80:  # 准确率大于0.80保存模型 可自行调整
                     saver.save(sess, 'models/crack_capcha.model', global_step=step)
                     break
