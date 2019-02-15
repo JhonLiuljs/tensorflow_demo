@@ -11,10 +11,28 @@ import sys
 text, image = gen_captcha_text_and_image()  # 先生成验证码和文字测试模块是否完全
 print("验证码图像channel:", image.shape)  # (60, 160, 3)
 # 图像大小
+# 图片高
 IMAGE_HEIGHT = 60
+# 图片宽
 IMAGE_WIDTH = 160
+# 验证码长度
 MAX_CAPTCHA = len(text)
 print("验证码文本最长字符数", MAX_CAPTCHA)  # 验证码最长4字符; 我全部固定为4,可以不固定. 如果验证码长度小于4，用'_'补齐
+
+"""
+cnn在图像大小是2的倍数时性能最高, 如果你用的图像大小不是2的倍数，可以在图像边缘补无用像素。
+np.pad(image【,((2,3),(2,2)), 'constant', constant_values=(255,))  # 在图像上补2行，下补3行，左补2行，右补2行
+"""
+
+# 文本转向量
+char_set = number + alphabet + ALPHABET + ['_']  # 如果验证码长度小于4, '_'用来补齐
+# 验证码选择空间
+CHAR_SET_LEN = len(char_set)
+####################################################################
+# 提前定义变量空间 申请占位符 按照图片
+X = tf.placeholder(tf.float32, [None, IMAGE_HEIGHT * IMAGE_WIDTH])
+Y = tf.placeholder(tf.float32, [None, MAX_CAPTCHA * CHAR_SET_LEN])
+keep_prob = tf.placeholder(tf.float32)  # dropout
 
 
 # 把彩色图像转为灰度图像（色彩对识别验证码没有什么用）
@@ -30,15 +48,17 @@ def convert2gray(img):
 
 
 """
-cnn在图像大小是2的倍数时性能最高, 如果你用的图像大小不是2的倍数，可以在图像边缘补无用像素。
-np.pad(image【,((2,3),(2,2)), 'constant', constant_values=(255,))  # 在图像上补2行，下补3行，左补2行，右补2行
+#向量（大小MAX_CAPTCHA*CHAR_SET_LEN）用0,1编码 每63个编码一个字符，这样顺利有，字符也有
+vec = text2vec("F5Sd")
+text = vec2text(vec)
+print(text)  # F5Sd
+vec = text2vec("SFd5")
+text = vec2text(vec)
+print(text)  # SFd5
 """
 
-# 文本转向量
-char_set = number + alphabet + ALPHABET + ['_']  # 如果验证码长度小于4, '_'用来补齐
-CHAR_SET_LEN = len(char_set)
 
-
+# 验证码字符转换为长向量
 def text2vec(text):
     text_len = len(text)
     if text_len > MAX_CAPTCHA:
@@ -86,18 +106,7 @@ def vec2text(vec):
     return "".join(text)
 
 
-"""
-#向量（大小MAX_CAPTCHA*CHAR_SET_LEN）用0,1编码 每63个编码一个字符，这样顺利有，字符也有
-vec = text2vec("F5Sd")
-text = vec2text(vec)
-print(text)  # F5Sd
-vec = text2vec("SFd5")
-text = vec2text(vec)
-print(text)  # SFd5
-"""
-
-
-# 生成一个训练batch
+# 获得1组验证码数据，生成一个训练batch
 def get_next_batch(batch_size=128):
     batch_x = np.zeros([batch_size, IMAGE_HEIGHT * IMAGE_WIDTH])
     batch_y = np.zeros([batch_size, MAX_CAPTCHA * CHAR_SET_LEN])
@@ -119,13 +128,6 @@ def get_next_batch(batch_size=128):
         batch_y[i, :] = text2vec(text)
     # 返回该训练批次
     return batch_x, batch_y
-
-
-####################################################################
-# 申请占位符 按照图片
-X = tf.placeholder(tf.float32, [None, IMAGE_HEIGHT * IMAGE_WIDTH])
-Y = tf.placeholder(tf.float32, [None, MAX_CAPTCHA * CHAR_SET_LEN])
-keep_prob = tf.placeholder(tf.float32)  # dropout
 
 
 # 定义CNN

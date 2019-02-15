@@ -44,6 +44,18 @@ def gen_captcha_text_and_image():
     return captcha_text, captcha_image
 
 
+# 把彩色图像转为灰度图像（色彩对识别验证码没有什么用）
+def convert2gray(img):
+    if len(img.shape) > 2:
+        gray = np.mean(img, -1)
+        # 上面的转法较快，正规转法如下
+        # r, g, b = img[:,:,0], img[:,:,1], img[:,:,2]
+        # gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
+        return gray
+    else:
+        return img
+
+
 if __name__ == '__main__':
     # 测试
     for i in range(10000):
@@ -58,4 +70,3 @@ if __name__ == '__main__':
     print("over!")
     sys.exit()
 
-# print gen_captcha_text_and_image()
