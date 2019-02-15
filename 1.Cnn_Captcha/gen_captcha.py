@@ -33,7 +33,7 @@ def gen_captcha_text_and_image():
     captcha_text = ''.join(captcha_text)  # 类型转换为字符串
 
     captcha = image.generate(captcha_text)
-    # image.write(captcha_text, 'create_image/image/' + captcha_text + '.jpg')  # 写到文件
+    # image.write(captcha_text, 'image/' + captcha_text + '.jpg')  # 写到文件
 
     # rm  =  'rm '+captcha_text + '.jpg'
     # os.system(rm)
