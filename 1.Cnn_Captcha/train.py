@@ -226,7 +226,7 @@ def train_continue(step):
         while 1:
             batch_x, batch_y = get_next_batch(100)
             _, loss_ = sess.run([optimizer, loss], feed_dict={X: batch_x, Y: batch_y, keep_prob: 0.75})
-            if step % 50 == 0:
+            if step % 100 == 0:
                 batch_x_test, batch_y_test = get_next_batch(100)
                 acc = sess.run(accuracy, feed_dict={X: batch_x_test, Y: batch_y_test, keep_prob: 1.})
                 print(step, acc, loss_)
