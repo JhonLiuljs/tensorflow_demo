@@ -209,7 +209,7 @@ def train_first():
                 acc = sess.run(accuracy, feed_dict={X: batch_x_test, Y: batch_y_test, keep_prob: 1.})
                 print(step, acc, loss_)
                 if acc > 0.80:  # 准确率大于0.80保存模型 可自行调整
-                    saver.save(sess, 'models/crack_capcha.model', global_step=step)
+                    saver.save(sess, './models/crack_capcha.model', global_step=step)
                     break
             step += 1
 
@@ -220,7 +220,7 @@ def train_continue(step):
 
     saver = tf.train.Saver()
     with tf.Session() as sess:
-        path = "models/crack_capcha.model-" + str(step)
+        path = "./models/crack_capcha.model-" + str(step)
         saver.restore(sess, path)
         # 36300 36300 0.9325 0.0147698
         while 1:
@@ -231,9 +231,9 @@ def train_continue(step):
                 acc = sess.run(accuracy, feed_dict={X: batch_x_test, Y: batch_y_test, keep_prob: 1.})
                 print(step, acc, loss_)
                 if acc >= 0.925:
-                    saver.save(sess, 'models/crack_capcha.model', global_step=step)
+                    saver.save(sess, './models/crack_capcha.model', global_step=step)
                 if acc >= 0.95:
-                    saver.save(sess, 'models/crack_capcha.model', global_step=step)
+                    saver.save(sess, './models/crack_capcha.model', global_step=step)
                     break
             step += 1
 
@@ -244,7 +244,7 @@ def crack_captcha(captcha_image, step):
 
     saver = tf.train.Saver()
     with tf.Session() as sess:
-        path = 'models/crack_capcha.model-' + str(step)
+        path = './models/crack_capcha.model-' + str(step)
         saver.restore(sess, path)
 
         predict = tf.argmax(tf.reshape(output, [-1, MAX_CAPTCHA, CHAR_SET_LEN]), 2)
@@ -351,9 +351,9 @@ if __name__ == '__main__':
         plt.imshow(image)
         plt.show()
 
-        image = convert2gray(image)
-        image = image.flatten() / 255
+        image = convert2gray(image)     # 生成一张新图把彩色图像转为灰度图像
+        image = image.flatten() / 255   # 将图片一维化
 
-        predict_text = crack_captcha(image, 36300)
+        predict_text = crack_captcha(image, 36300)  # 导入模型识别
         print("正确: {}  预测: {}".format(text, [char_set[char] for i, char in enumerate(predict_text)]))
     sys.exit()
