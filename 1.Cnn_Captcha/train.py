@@ -208,7 +208,7 @@ def train_first():
                 batch_x_test, batch_y_test = get_next_batch(100)
                 acc = sess.run(accuracy, feed_dict={X: batch_x_test, Y: batch_y_test, keep_prob: 1.})
                 print(step, acc, loss_)
-                if acc > 0.001:  # 准确率大于0.80保存模型 可自行调整
+                if acc > 0.80:  # 准确率大于0.80保存模型 可自行调整
                     saver.save(sess, './models/crack_capcha.model', global_step=step)
                     break
             step += 1
@@ -221,8 +221,8 @@ def train_continue(step):
     saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
     with tf.Session() as sess:
         if step is None:
-            print(tf.train.latest_checkpoint('.'))
-            saver.restore(sess, tf.train.latest_checkpoint('.'))
+            print(tf.train.latest_checkpoint('./models'))
+            saver.restore(sess, tf.train.latest_checkpoint('./models'))
         else:
             path = './models/crack_capcha.model-' + str(step)
             saver.restore(sess, path)
@@ -249,8 +249,8 @@ def crack_captcha(captcha_image, step):
     saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
     with tf.Session() as sess:
         if step is None:
-            print(tf.train.latest_checkpoint('.'))
-            saver.restore(sess, tf.train.latest_checkpoint('.'))
+            print(tf.train.latest_checkpoint('./models'))
+            saver.restore(sess, tf.train.latest_checkpoint('./models'))
         else:
             path = './models/crack_capcha.model-' + str(step)
             saver.restore(sess, path)
@@ -349,7 +349,7 @@ def train_crack_captcha_cnn():
 
 if __name__ == '__main__':
     # 训练和测试开关
-    train = 1
+    train = 0
     if train:
         # train_continue(36300)
         train_first()
@@ -365,6 +365,6 @@ if __name__ == '__main__':
         image = convert2gray(image)  # 生成一张新图把彩色图像转为灰度图像
         image = image.flatten() / 255  # 将图片一维化
 
-        predict_text = crack_captcha(image, 36300)  # 导入模型识别
+        predict_text = crack_captcha(image, None)  # 导入模型识别
         print("正确: {}  预测: {}".format(text, predict_text))
     sys.exit()
