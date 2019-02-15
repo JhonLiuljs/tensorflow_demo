@@ -1,8 +1,6 @@
 # tensorflow
 使用谷歌开源的TensorFlow进行一系列的训练实践
 
-2017.9.10 重启项目
-
 项目列表
 
 前三篇主要学习自熊猫的博客：http://blog.topspeedsnail.com/
