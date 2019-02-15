@@ -256,8 +256,13 @@ def crack_captcha(captcha_image, step):
             saver.restore(sess, path)
         predict = tf.argmax(tf.reshape(output, [-1, MAX_CAPTCHA, CHAR_SET_LEN]), 2)
         text_list = sess.run(predict, feed_dict={X: [captcha_image], keep_prob: 1})
-        text = text_list[0].tolist()
-        return text
+        texts = text_list[0].tolist()
+        vector = np.zeros(MAX_CAPTCHA * CHAR_SET_LEN)
+        i = 0
+        for n in texts:
+            vector[i * CHAR_SET_LEN + n] = 1
+            i += 1
+        return vec2text(vector)
 
 
 '''
