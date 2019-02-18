@@ -11,6 +11,7 @@ from constants import number
 from constants import alphabet
 from constants import ALPHABET
 
+
 # 验证码一般都无视大小写；验证码长度4个字符
 def random_captcha_text(char_set=number + alphabet + ALPHABET, captcha_size=4):
     """ 指定使用的验证码内容列表和长期 返回随机的验证码文本 """
