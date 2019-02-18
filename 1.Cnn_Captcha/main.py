@@ -145,7 +145,7 @@ def _fc_layer(w_alpha=0.01, b_alpha=0.1, input=None, last_size=None, cur_size=No
 
 
 # 定义CNN 构建前向传播网络
-def crack_captcha_cnn(w_alpha=0.01, b_alpha=0.1):
+def crack_captcha_cnn():
     # 将占位符 转换为 按照图片给的新样式
     x = tf.reshape(X, shape=[-1, IMAGE_HEIGHT, IMAGE_WIDTH, 1])
 
@@ -341,17 +341,17 @@ if __name__ == '__main__':
         # train_continue(36300)
         train_first()
     else:
-        text, image = gen_captcha_text_and_image()
+        m_text, m_image = gen_captcha_text_and_image()
 
         f = plt.figure()
         ax = f.add_subplot(111)
-        ax.text(0.1, 0.9, text, ha='center', va='center', transform=ax.transAxes)
-        plt.imshow(image)
+        ax.text(0.1, 0.9, m_text, ha='center', va='center', transform=ax.transAxes)
+        plt.imshow(m_image)
         plt.show()
 
-        image = convert2gray(image)  # 生成一张新图把彩色图像转为灰度图像
+        image = convert2gray(m_image)  # 生成一张新图把彩色图像转为灰度图像
         image = image.flatten() / 255  # 将图片一维化
 
         predict_text = crack_captcha(image, None)  # 导入模型识别
-        print("正确: {}  预测: {}".format(text, predict_text))
+        print("正确: {}  预测: {}".format(m_text, predict_text))
     sys.exit()
