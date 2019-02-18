@@ -63,9 +63,9 @@ num_classes = 2
 batch_size = 64
 num_batch = len(train_x_vec) // batch_size
 
+
 X = tf.placeholder(tf.int32, [None, input_size])
 Y = tf.placeholder(tf.float32, [None, num_classes])
-
 dropout_keep_prob = tf.placeholder(tf.float32)
 
 
@@ -106,6 +106,33 @@ def neural_network(vocabulary_size, embedding_size=128, num_filters=128):
     return output
 
 
+# 训练
+def train_neural_network():
+    output = neural_network(len(vocabulary_list))
+
+    optimizer = tf.train.AdamOptimizer(1e-3)
+    loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=output, labels=Y))
+    grads_and_vars = optimizer.compute_gradients(loss)
+    train_op = optimizer.apply_gradients(grads_and_vars)
+
+    saver = tf.train.Saver(tf.global_variables())
+    with tf.Session() as sess:
+        sess.run(tf.global_variables_initializer())
+
+        for e in range(201):
+            for i in range(num_batch):
+                batch_x = train_x_vec[i * batch_size: (i + 1) * batch_size]
+                batch_y = train_y[i * batch_size: (i + 1) * batch_size]
+            if e % 50 == 0:
+                saver.save(sess, "./name2sex.model", global_step=e)
+        try:
+            _, loss_ = sess.run([train_op, loss], feed_dict={X: batch_x, Y: batch_y, dropout_keep_prob: 0.5})
+            print(e, i, loss_)
+        except Exception as e:
+            print(e)
+            'error'  # 保存模型
+
+
 # 使用训练的模型
 def detect_sex(name_list):
     x = []
@@ -139,5 +166,10 @@ def detect_sex(name_list):
 
 
 if __name__ == '__main__':
-    detect_sex(["白富美", "高帅富", "王婷婷", "田野", "刘军帅", "吕晓鹏"])
+    # 训练和测试开关
+    train = 1
+    if train:
+        train_neural_network()
+    else:
+        detect_sex(["白富美", "高帅富", "王婷婷", "田野", "刘军帅", "吕晓鹏"])
     sys.exit()
