@@ -1,7 +1,7 @@
 
 使用TensorFlow去训练自己生成的验证码，
 TensorFlow版本：
-0.12  version：1.00
+2.0  version：1.00
 
 
 当前进度：
@@ -19,8 +19,7 @@ python TensorFlow_cnn.py
 
 3：测试：
 完成训练后，自己测试模型准确度
-python TensorFlow_cnn_test_model.py
-
+设置train为0
 
 新版说明：
 加注释
