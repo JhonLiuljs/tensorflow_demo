@@ -1,32 +1,19 @@
 # coding:utf-8
 from gen_captcha import gen_captcha_text_and_image
-from gen_captcha import number
-from gen_captcha import alphabet
-from gen_captcha import ALPHABET
+from constants import IMAGE_HEIGHT
+from constants import IMAGE_WIDTH
+from constants import MAX_CAPTCHA
+from constants import CHAR_SET_LEN
 
 import numpy as np
 import tensorflow as tf
 import sys
 import matplotlib.pyplot as plt
 
-# 图像大小
-# 图片高
-IMAGE_HEIGHT = 60
-# 图片宽
-IMAGE_WIDTH = 160
-# 验证码长度
-MAX_CAPTCHA = 4
-print("验证码文本最长字符数", MAX_CAPTCHA)  # 验证码最长4字符; 我全部固定为4,可以不固定. 如果验证码长度小于4，用'_'补齐
-
 """
 cnn在图像大小是2的倍数时性能最高, 如果你用的图像大小不是2的倍数，可以在图像边缘补无用像素。
 np.pad(image【,((2,3),(2,2)), 'constant', constant_values=(255,))  # 在图像上补2行，下补3行，左补2行，右补2行
 """
-
-# 文本转向量
-char_set = number + alphabet + ALPHABET + ['_']  # 如果验证码长度小于4, '_'用来补齐
-# 验证码选择空间
-CHAR_SET_LEN = len(char_set)
 ##################################
 # 提前定义变量空间 申请占位符 按照图片
 X = tf.placeholder(tf.float32, [None, IMAGE_HEIGHT * IMAGE_WIDTH])
@@ -62,7 +49,6 @@ def text2vec(text):
     text_len = len(text)
     if text_len > MAX_CAPTCHA:
         raise ValueError('验证码最长4个字符')
-
     vector = np.zeros(MAX_CAPTCHA * CHAR_SET_LEN)
 
     def char2pos(c):
@@ -348,6 +334,7 @@ def train_crack_captcha_cnn():
 '''
 
 if __name__ == '__main__':
+    print("验证码文本最长字符数", MAX_CAPTCHA)  # 验证码最长4字符; 我全部固定为4,可以不固定. 如果验证码长度小于4，用'_'补齐
     # 训练和测试开关
     train = 1
     if train:
