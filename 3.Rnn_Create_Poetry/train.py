@@ -137,7 +137,7 @@ def train_neural_network():
                 n += 1
                 print(epoch, batch, train_loss)
             if epoch % 7 == 0:
-                saver.save(sess, './poetry.module', global_step=epoch)
+                saver.save(sess, './models/poetry.module', global_step=epoch)
 
 
 if __name__ == '__main__':
