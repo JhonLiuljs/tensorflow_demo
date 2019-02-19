@@ -124,7 +124,7 @@ def train_neural_network():
                 batch_x = train_x_vec[i * batch_size: (i + 1) * batch_size]
                 batch_y = train_y[i * batch_size: (i + 1) * batch_size]
             if e % 50 == 0:
-                saver.save(sess, "./name2sex.model", global_step=e)
+                saver.save(sess, "./models/name2sex.model", global_step=e)
         try:
             _, loss_ = sess.run([train_op, loss], feed_dict={X: batch_x, Y: batch_y, dropout_keep_prob: 0.5})
             print(e, i, loss_)
