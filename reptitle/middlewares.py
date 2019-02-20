@@ -6,6 +6,8 @@
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+import random
+from reptitle.settings import USER_AGENT_LIST
 
 
 class ReptitleSpiderMiddleware(object):
@@ -101,3 +103,12 @@ class ReptitleDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+class RandomUserAgentMiddleware(object):
+
+    def process_request(self, request, spider):
+        rand_use  = random.choice(USER_AGENT_LIST)
+        if rand_use:
+            request.headers.setdefault('User-Agent', rand_use)
+
