@@ -1,6 +1,7 @@
 import scrapy
 from reptitle.items import AreaItem
 
+
 class NbsSpider(scrapy.Spider):
     name = "nbs"
     allowed_domains = ["stats.gov.cn"]
@@ -14,9 +15,9 @@ class NbsSpider(scrapy.Spider):
             if len(sel.xpath('a/@href').extract()) != 0:
                 title = sel.xpath('a/text()').extract()
                 link = sel.xpath('a/@href').extract()
-                if (not title[0].isdigit()):
+                if not title[0].isdigit():
                     item = AreaItem()
-                    item["code"] = link[0].split(".")[0]+"0000000000"
+                    item["code"] = link[0].split(".")[0] + "0000000000"
                     item["name"] = title[0]
                     yield item
                 cl = url + link[0]
@@ -28,7 +29,7 @@ class NbsSpider(scrapy.Spider):
             if len(sel.xpath('a/@href').extract()) != 0:
                 title = sel.xpath('a/text()').extract()
                 link = sel.xpath('a/@href').extract()
-                if(not title[0].isdigit()):
+                if not title[0].isdigit():
                     item = AreaItem()
                     code = link[0].split(".")[0].split("/")[1]
                     code += "00000000"
@@ -44,7 +45,7 @@ class NbsSpider(scrapy.Spider):
             if len(sel.xpath('a/@href').extract()) != 0:
                 title = sel.xpath('a/text()').extract()
                 link = sel.xpath('a/@href').extract()
-                if (not title[0].isdigit()):
+                if not title[0].isdigit():
                     item = AreaItem()
                     code = link[0].split(".")[0].split("/")[1]
                     if len(code) == 9:
@@ -54,4 +55,3 @@ class NbsSpider(scrapy.Spider):
                     item["code"] = code
                     item["name"] = title[0]
                     yield item
-
