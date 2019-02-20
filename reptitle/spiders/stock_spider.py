@@ -1,7 +1,7 @@
 import scrapy
 import random
 import re
-from reptitle.items import AreaItem
+from reptitle.items import StockItem
 
 
 class StockSpider(scrapy.Spider):
@@ -34,13 +34,21 @@ class StockSpider(scrapy.Spider):
             'Referer': 'https://gupiao.baidu.com/',
             'User-Agent': ua
         }  # 构造请求头
-        for href in response.css('quotebody').extract():
-            try:
-                code = re.findall(r"[s][hz]\d{6}", href)[0]
-                print(href)
-            except Exception as e:
-                print(e)
-                continue
+        for sel in response.selector.xpath('//div[contains(@class, "quotebody")]//div//ul//li'):
+            if len(sel.xpath('a/@href').extract()) != 0:
+                text = sel.xpath('a/text()').extract()[0]
+                href = sel.xpath('a/@href').extract()[0]
+                try:
+                    code_all = re.findall(r"[s][hz]\d{6}", href)[0]
+                    item = StockItem()
+                    item["name"] = re.sub(r'\(.*\)', "", text)
+                    item["type"] = code_all[0:2]
+                    item["code"] = code_all[2:]
+                    item["east_money_detail_url"] = href
+                    yield item
+                except Exception as e:
+                    print(e)
+                    continue
 
     def city_item(self, response):
         url = "http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2017/"
@@ -49,7 +57,7 @@ class StockSpider(scrapy.Spider):
                 title = sel.xpath('a/text()').extract()
                 link = sel.xpath('a/@href').extract()
                 if (not title[0].isdigit()):
-                    item = AreaItem()
+                    item = StockItem()
                     code = link[0].split(".")[0].split("/")[1]
                     code += "00000000"
                     item["code"] = code
@@ -65,7 +73,7 @@ class StockSpider(scrapy.Spider):
                 title = sel.xpath('a/text()').extract()
                 link = sel.xpath('a/@href').extract()
                 if (not title[0].isdigit()):
-                    item = AreaItem()
+                    item = StockItem()
                     code = link[0].split(".")[0].split("/")[1]
                     if len(code) == 9:
                         code += "000"

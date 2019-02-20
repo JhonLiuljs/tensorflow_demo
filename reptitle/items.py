@@ -22,6 +22,7 @@ class AreaItem(scrapy.Item):
 class StockItem(scrapy.Item):
     code = scrapy.Field()           # 编码
     name = scrapy.Field()           # 名称
+    type = scrapy.Field()           # 类别
     east_money_detail_url = scrapy.Field()     # 东方财富详情页地址
 
 
