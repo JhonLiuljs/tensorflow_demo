@@ -149,12 +149,13 @@ def detect_sex(name_list):
     saver = tf.train.Saver(tf.global_variables())
     with tf.Session() as sess:
         # 恢复前一次训练
-        ckpt = tf.train.get_checkpoint_state('.')
+        ckpt = tf.train.get_checkpoint_state('./models')
         if ckpt != None:
             print(ckpt.model_checkpoint_path)
             saver.restore(sess, ckpt.model_checkpoint_path)
         else:
             print("没找到模型")
+            return
 
         predictions = tf.argmax(output, 1)
         res = sess.run(predictions, {X: x, dropout_keep_prob: 1.0})
