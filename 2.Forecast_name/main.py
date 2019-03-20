@@ -167,7 +167,7 @@ def detect_sex(name_list):
 
 if __name__ == '__main__':
     # 训练和测试开关
-    train = 0
+    train = True
     if train:
         train_neural_network()
     else:

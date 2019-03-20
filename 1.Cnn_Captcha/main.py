@@ -336,7 +336,7 @@ def train_crack_captcha_cnn():
 if __name__ == '__main__':
     print("验证码文本最长字符数", MAX_CAPTCHA)  # 验证码最长4字符; 我全部固定为4,可以不固定. 如果验证码长度小于4，用'_'补齐
     # 训练和测试开关
-    train = 1
+    train = True
     if train:
         # train_continue(36300)
         train_first()
