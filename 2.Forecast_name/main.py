@@ -111,7 +111,7 @@ def train_neural_network():
     output = neural_network(len(vocabulary_list))
 
     optimizer = tf.train.AdamOptimizer(1e-3)
-    loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=output, labels=Y))
+    loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(logits=output, labels=Y))
     grads_and_vars = optimizer.compute_gradients(loss)
     train_op = optimizer.apply_gradients(grads_and_vars)
 
