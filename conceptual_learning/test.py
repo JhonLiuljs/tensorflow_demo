@@ -37,7 +37,7 @@ for i in range(dd.values.shape[0] - 34):
 fg = DataFrame(g)
 
 print(fg)
-# fg.to_excel('fg.xls')
+fg.to_excel('fg.xls')
 
 # -*- coding: utf-8 -*-
 # 建立、训练多层神经网络，并完成模型的检验
