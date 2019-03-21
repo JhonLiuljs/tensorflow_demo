@@ -3,6 +3,7 @@
 loss测试
 """
 import tensorflow as tf
+import sys
 
 
 class Loss:
@@ -18,12 +19,14 @@ class Loss:
         1、这个操作的输入logits是未经缩放的，该操作内部会对logits使用softmax操作。
         2、 参数labels,logits必须有相同的形状 [batch_size, num_classes] 和相同的类型。
         3、求交叉熵的公式中常常使用的是以2为底的log函数，这一点便于我们验证
+        函数内部的 logits 不能进行缩放，因为在这个工作会在该函数内部进行（注意函数名称中的 softmax ，它负责完成原始数据的归一化），
+        如果 logits 进行了缩放，那么反而会影响计算正确性。
         """
         result1 = tf.nn.softmax_cross_entropy_with_logits(labels=self.labels, logits=self.logits)
         result2 = -tf.reduce_mean(self.labels * tf.log(self.logits_scaled), 0)  # 0表示列上行动，加和或者求平均值
         b = self.labels * tf.log(self.logits_scaled)
         a = tf.log(self.logits_scaled)  # 这个表示以2为底的log()
-        result3 = tf.nn.softmax_cross_entropy_with_logits(labels=self.labels, logits=self.logits_scaled)
+        result3 = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.labels, logits=self.logits))
         with tf.Session() as sess:
             print("a:", sess.run(a))
             print("b:", sess.run(b))
@@ -60,3 +63,4 @@ class Loss:
 if __name__ == "__main__":
     loss = Loss()
     loss.softmax_cross_entropy_with_logits()
+    sys.exit()
